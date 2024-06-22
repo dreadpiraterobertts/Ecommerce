@@ -6,6 +6,21 @@ import CheckoutButton from './CheckOutButton';
 
 const CartItems = () => {
     const { getTotalAmount, all_product, cartItems, removeFromCart } = useContext(ShopContext);
+
+  // Function to collect cart information
+  const collectCartInfo = () => {
+    return all_product
+      .filter(product => cartItems[product.id] > 0)
+      .map(product => ({
+        id: product.id,
+        name: product.name,
+        quantity: cartItems[product.id],
+        price: product.new_price,
+      }));
+  };
+
+  const cartInfo = collectCartInfo();
+
     return (
         <div className='cartitems'>
             <div className="cartitems-format-main">
@@ -52,7 +67,7 @@ const CartItems = () => {
                             <h3>${getTotalAmount()}</h3>
                         </div>
                     </div>
-                    <CheckoutButton totalAmount={getTotalAmount()} />
+                    <CheckoutButton totalAmount={getTotalAmount() } cartInfo={cartInfo}/>
                 </div>
                 <div className="cartitems-promocode">
                     <p>If you have a promo code, enter it here</p>

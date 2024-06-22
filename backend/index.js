@@ -13,6 +13,7 @@ const bodyParser = require('body-parser');
 
 app.use(express.json())
 app.use(cors())
+app.use(bodyParser.json())
 
 //Database Connection with Mongo
 
@@ -23,31 +24,116 @@ mongoose.connect("mongodb+srv://mussiet:GGNZ0UVfKwnoTfyq@cluster0.cmdc596.mongod
 app.get("/",(req,res)=>{
     res.send("Express App is running")
 })
-//Stripe integration
+// Define schema and model for Order
+
+
 app.post('/create-checkout-session',async(req,res)=>{
-    const {amount} = req.body
-
-    const session = await stripe.checkout.sessions.create({
-        payment_method_types: ['card'],
-        line_items: [
-          {
-            price_data: {
-              currency: 'usd',
-              product_data: {
-                name: 'Total Cart Amount',
-              },
-              unit_amount: amount * 100,
+    const {amount,deliveryInfo} = req.body
+    try{
+        const session = await stripe.checkout.sessions.create({
+            payment_method_types:['card'],
+            line_items:[
+                {
+                    price_data:{
+                        currency:'usd',
+                        product_data:{
+                            name:"Total Cart Amount",
+                        },
+                        unit_amount: amount * 100,
+                    },
+                    quantity:1,
+                },
+                
+            ],
+            mode:'payment',
+            "metadata":{
+                "orderId": deliveryInfo.orderId
             },
-            quantity: 1,
-          },
-        ],
-        mode: 'payment',
-        success_url: 'http://localhost:5173/success',
-        cancel_url: 'http://localhost:5173/cancel',
-    })
-    res.json({id:session.id})
-})
+            success_url:'http://localhost:5173/success?session_id={CHECKOUT_SESSION_ID}?order_id={deliveryInfo.orderId}',
+            cancel_url :'http://localhost:5173/cancel'
+        })
+        res.json({ id: session.id })
+    }catch(error){
+        console.error('Error Creating Checkout Session: ',error)
+    }
 
+})
+// Endpoint to verify session ID and check payment status
+app.get('/verify-session/:sessionId', async (req, res) => {
+    const sessionId = req.params.sessionId;
+  
+    try {
+      // Retrieve Checkout Session from Stripe
+      const session = await stripe.checkout.sessions.retrieve(sessionId);
+  
+      // Check if payment was successful
+      if (session.payment_status === 'paid') {
+        res.json({ success: true });
+      } else {
+        res.json({ success: false });
+      }
+    } catch (err) {
+      console.error('Error retrieving checkout session:', err);
+      res.status(500).json({ error: 'Failed to retrieve checkout session' });
+    }
+  });
+
+  const cartItemSchema = new mongoose.Schema({
+    id: Number,
+    name: String,
+    price: Number,
+    quantity: Number,
+  });
+  
+  const orderSchema = new mongoose.Schema({
+    orderId: {
+        type:Number,
+        unique:true
+    },
+    senderName: String,
+    address: String,
+    city: String,
+    recieverPhone: String,
+    recieverName: String,
+    cartItems: [cartItemSchema], // Array of cartItemSchema objects
+    totalAmount: Number,
+  });
+  
+  const Order = mongoose.model('Order', orderSchema);
+  
+  // Endpoint to process local storage data from frontend
+  app.post('/process-local-storage-data', async (req, res) => {
+    try {
+      const { data } = req.body; // Destructure data from request body
+  
+      // Create a new Order document using the Order model
+      const newOrder = new Order({
+        orderId: data.orderId,
+        senderName: data.senderName,
+        address: data.address,
+        city: data.city,
+        recieverPhone: data.recieverPhone,
+        recieverName: data.recieverName,
+        cartItems: data.cartInfo, // Ensure data.cartItems matches the cartItemSchema structure
+        totalAmount: data.totalAmount,
+      });
+  
+      // Save the new Order document to MongoDB
+      await newOrder.save();
+  
+      // Respond with a success message
+      res.status(200).json({ message: 'Order saved successfully' });
+    } catch (error) {
+      console.error('Error processing order:', error);
+      res.status(500).json({ error: 'Failed to process order' });
+    }
+  });
+  
+  // Start the server
+
+  
+
+  
 // Image storage Engine
 
 const storage = multer.diskStorage({
