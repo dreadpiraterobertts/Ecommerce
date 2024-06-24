@@ -104,7 +104,7 @@ app.get('/verify-session/:sessionId', async (req, res) => {
   // Endpoint to process local storage data from frontend
   app.post('/process-local-storage-data', async (req, res) => {
     try {
-      const { data } = req.body; // Destructure data from request body
+      const data  = req.body; // Destructure data from request body
   
       // Create a new Order document using the Order model
       const newOrder = new Order({
