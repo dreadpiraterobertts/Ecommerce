@@ -128,14 +128,16 @@ app.get('/verify-session/:sessionId', async (req, res) => {
       res.status(500).json({ error: 'Failed to process order' });
     }
   });
-  
-  // Start the server
 
-  
+//get all orders for the admin
+app.get('/get-orders', async (req, res) => {
+    let orders = await Order.find({}).sort({ orderId: -1 }); // Sort by orderId in descending order
+    console.log("All Orders Fetched");
+    res.send(orders);
+  });
 
-  
-// Image storage Engine
 
+//image storage
 const storage = multer.diskStorage({
     destination: './upload/images',
     filename: (req,file,cb)=>{

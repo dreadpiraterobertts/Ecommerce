@@ -1,0 +1,39 @@
+.orders-container {
+    margin: 20px;
+  }
+  
+  .orders-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+  
+  .orders-table th,
+  .orders-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .orders-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+  }
+  
+  .cart-items-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .cart-items-table th,
+  .cart-items-table td {
+    border: 1px solid #ddd;
+    padding: 4px;
+    text-align: left;
+  }
+  
+  .cart-items-table th {
+    background-color: #e6e6e6;
+    font-weight: normal;
+  }
+  

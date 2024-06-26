@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import Confetti from 'react-confetti'
 
 const Success = () => {
   const [orderVerified, setOrderVerified] = useState(false);
@@ -57,6 +58,11 @@ const Success = () => {
       {orderVerified ? (
         <div>
           <h1>Payment Successful</h1>
+          <Confetti
+          width={2000}
+          height={720}
+         />
+  
         </div>
       ) : (
         <p>Verifying Order</p>
