@@ -86,17 +86,15 @@ app.get('/verify-session/:sessionId', async (req, res) => {
   });
   
   const orderSchema = new mongoose.Schema({
-    orderId: {
-        type:Number,
-        unique:true
-    },
+    orderId: String,
     senderName: String,
     address: String,
     city: String,
     recieverPhone: String,
     recieverName: String,
-    cartItems: [cartItemSchema], // Array of cartItemSchema objects
     totalAmount: Number,
+    cartItems: Array,
+    delivered: { type: Boolean, default: false } // New field
   });
   
   const Order = mongoose.model('Order', orderSchema);
@@ -129,13 +127,41 @@ app.get('/verify-session/:sessionId', async (req, res) => {
     }
   });
 
+  app.post('/check-delivered', async (req, res) => {
+    const { id } = req.body;
+    try {
+      await Order.updateOne({ orderId: id }, { $set: { delivered: true } });
+  
+      const deliveredOrders = await Order.find({ delivered: true }).sort({ updatedAt: -1 }).exec();
+      if (deliveredOrders.length > 20) {
+        const excessOrders = deliveredOrders.slice(20);
+        const excessOrderIds = excessOrders.map(order => order.orderId);
+        await Order.deleteMany({ orderId: { $in: excessOrderIds } });
+      }
+  
+      res.status(200).json({ message: 'Order marked as delivered' });
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to update order' });
+    }
+  });
 //get all orders for the admin
 app.get('/get-orders', async (req, res) => {
-    let orders = await Order.find({}).sort({ orderId: -1 }); // Sort by orderId in descending order
-    console.log("All Orders Fetched");
-    res.send(orders);
+    try {
+      const orders = await Order.find({ delivered: false });
+      res.status(200).json(orders);
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to fetch orders' });
+    }
   });
 
+app.get('/get-delivered-orders', async (req, res) => {
+    try {
+      const orders = await Order.find({ delivered: true }).sort({ updatedAt: -1 }).limit(20);
+      res.status(200).json(orders);
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to fetch orders' });
+    }
+  });
 
 //image storage
 const storage = multer.diskStorage({
@@ -156,6 +182,99 @@ app.post("/upload",upload.single('product'),(req,res)=>{
         image_url:`http://localhost:${port}/images/${req.file.filename}`
     })
 })
+//banner storage
+
+const storageBanners = multer.diskStorage({
+    destination: './upload/images/banners',
+    filename: (req, file, cb) => {
+        return cb(null, `${file.fieldname}_${Date.now()}${path.extname(file.originalname)}`)
+    }
+});
+
+const uploadBanner = multer({ storage: storageBanners });
+app.use('/images/banners', express.static('upload/images/banners'));
+
+// Endpoint for uploading banners
+app.post("/upload/banner", uploadBanner.single('banner'), (req, res) => {
+    res.json({
+        success: 1,
+        image_url: `http://localhost:${port}/images/banners/${req.file.filename}`
+    });
+});
+
+// Endpoint for adding banner details to the database
+app.post('/addbanner', async (req, res) => {
+    const { category, image } = req.body;
+
+    if (!category || !image) {
+        return res.status(400).json({ success: 0, message: 'Category and image are required' });
+    }
+
+    try {
+
+        const bannerCount = await Banner.countDocuments();
+        if (bannerCount >= 2) {
+            return res.status(400).json({ success: 0, message: 'Cannot add more than 2 banners' });
+        }
+        const banner = new Banner({
+            category,
+            imageUrl: image,
+            imagePath: `upload/images/banners/${path.basename(image)}`,
+        });
+
+        await banner.save();
+        res.json({ success: 1, message: 'Banner added successfully' });
+    } catch (error) {
+        console.error('Error adding banner:', error);
+        res.status(500).json({ success: 0, message: 'Failed to add banner' });
+    }
+});
+
+// Endpoint to fetch all banners
+app.get('/banners', async (req, res) => {
+    try {
+        const banners = await Banner.find();
+        res.json({ success: 1, banners });
+    } catch (error) {
+        console.error('Error fetching banners:', error);
+        res.status(500).json({ success: 0, message: 'Failed to fetch banners' });
+    }
+});
+
+
+
+
+// Endpoint to delete a banner by ID
+app.post('/delbanner',async (req,res)=>{
+    await Banner.findOneAndDelete({id:req.body.id})
+    console.log("removed")
+    res.json({
+        success:true,
+        name:req.body.name,
+    })
+})
+
+
+
+const bannerSchema = new mongoose.Schema({
+    category: {
+        type: String,
+        enum: ['exclusive offers', 'sale offer'],
+        required: true,
+    },
+    imageUrl: {
+        type: String,
+        required: true,
+    },
+    imagePath: {
+        type: String,
+        required: true,
+    },
+}, { timestamps: true });
+
+const Banner = mongoose.model('Banner', bannerSchema);
+
+module.exports = Banner;
 
 // Schema for creating products
 

@@ -39,7 +39,7 @@ const CartItems = () => {
                             <img className='carticon-product-icon' src={e.image} alt="" />
                             <p>{e.name}</p>
                             <p>${e.new_price}</p>
-                            <button className='cartitems-quantity'>{cartItems[e.id]}</button>
+                            <p className='cartitems-quantity'>{cartItems[e.id]}</p>
                             <p>${e.new_price * cartItems[e.id]}</p>
                             <img className='cartitems-remove-icon' src={remove_icon} onClick={() => { removeFromCart(e.id) }} alt="" />
                         </div>
@@ -69,13 +69,7 @@ const CartItems = () => {
                     </div>
                     <CheckoutButton totalAmount={getTotalAmount() } cartInfo={cartInfo}/>
                 </div>
-                <div className="cartitems-promocode">
-                    <p>If you have a promo code, enter it here</p>
-                    <div className="cartitems-promobox">
-                        <input type="text" placeholder='promo code' />
-                        <button>Submit</button>
-                    </div>
-                </div>
+           
             </div>
         </div>
     )

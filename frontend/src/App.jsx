@@ -1,5 +1,5 @@
 // App.js
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import './App.css';
 import Navbar from './Components/Navbar/Navbar';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
@@ -20,7 +20,27 @@ import Success from './Pages/Success';
 
 function App() {
   const [count, setCount] = useState(0);
+  const [banner,setBanner] = useState([])
+  
+  useEffect(()=>{
+    fetchBanners()
 
+  },[])
+  const fetchBanners = async () => {
+    try {
+        const response = await fetch('http://localhost:4000/banners');
+        const data = await response.json();
+        if (data.success) {
+            setBanner(data.banners);
+            console.log(banner)
+        } else {
+            alert('Failed to fetch banners');
+        }
+    } catch (error) {
+        console.error('Error fetching banners:', error);
+        alert('An error occurred while fetching banners');
+    }
+};
   return (
     <div>
       <BrowserRouter>
@@ -29,9 +49,9 @@ function App() {
           <Routes>
             <Route path='/' element={<Home />} />
             <Route path='/allproducts' element={<AllProducts />} />
-            <Route path='/mens' element={<ShopCategory banner={men_banner} category="men" />} />
-            <Route path='/womens' element={<ShopCategory banner={women_banner} category="women" />} />
-            <Route path='/kids' element={<ShopCategory banner={kids_banner} category="kid" />} />
+            <Route path='/mens' element={<ShopCategory banner={banner.length > 0 ? banner[0].imageUrl : men_banner}  category="men" />} />
+            <Route path='/womens' element={<ShopCategory banner={banner.length > 0 ? banner[0].imageUrl : men_banner} category="women" />} />
+            <Route path='/kids' element={<ShopCategory banner={banner.length > 0 ? banner[0].imageUrl : men_banner} category="kid" />} />
             <Route path='/product'>
               <Route path=':productId' element={<Product />} />
             </Route>

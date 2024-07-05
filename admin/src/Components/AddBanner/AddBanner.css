@@ -1,0 +1,120 @@
+/* AddBanners.css */
+.addbanner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: #f8f8f8;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    width: 25%;
+}
+
+.addbanner-itemfield {
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.addbanner-itemfield p {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.addbanner-itemfield input[type="text"],
+.addbanner-itemfield select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.addbanner-selector {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.addbanner-thumbnail-img {
+    width: 100%;
+    max-width: 200px;
+    height: auto;
+    border: 2px dashed #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.addbanner-thumbnail-img:hover {
+    border-color: #aaa;
+}
+
+.addbanner-btn {
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.addbanner-btn:hover {
+    background-color: #218838;
+}
+/* BannerList.css */
+.banner-list {
+    width:75%;
+    padding: 20px;
+    background-color: #f8f8f8;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.banner-list h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    text-align: center;
+}
+
+.banner-list ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.banner-list li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 4px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.banner-image {
+    width: 100px;
+    height: auto;
+    margin-right: 15px;
+    border-radius: 4px;
+}
+
+.banner-list span {
+    flex-grow: 1;
+    font-size: 18px;
+}
+
+.remove-button {
+    margin-left: 10px;
+    padding: 5px 10px;
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.remove-button:hover {
+    background-color: #c82333;
+}

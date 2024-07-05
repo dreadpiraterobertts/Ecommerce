@@ -48,6 +48,13 @@
     border-radius: 10px;
     background:#ff4141 ;
 }
+.nav-login-cart img{
+    width: 25px;
+}
+.nav-login-cart li{
+    width: 25px;
+    list-style-type: none;
+}
 .nav-login-cart{
     display: flex;
     align-items: center;
@@ -85,25 +92,8 @@
 .nav-dropdown{
     display: none;
 }
-.search{
-    display: flex;
-    max-width: 300px;
-    gap:1px;
-}
-.search input{
-    border:1px solid black;
-    width: 200px; 
-    border-radius: 3px;
-}
-.search input:active{
-    border:1.5px solid black;
-}
-.search-icon{
-    width:30px;
-    position: relative;  
-    cursor: pointer;
-    border: 1px solid black; 
-}
+
+
 @media(max-width:1280px){
     .navbar{
         padding:12px 50px;

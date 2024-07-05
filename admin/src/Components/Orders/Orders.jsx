@@ -3,10 +3,12 @@ import './orders.css'; // Import the CSS file
 
 const Orders = () => {
   const [allOrders, setAllOrders] = useState([]);
+  const [view, setView] = useState('notDelivered'); // Toggle state for view
 
-  const fetchInfo = async () => {
+  const fetchOrders = async (view) => {
+    const endpoint = view === 'delivered' ? 'get-delivered-orders' : 'get-orders';
     try {
-      const response = await fetch('http://localhost:4000/get-orders');
+      const response = await fetch(`http://localhost:4000/${endpoint}`);
       const data = await response.json();
       setAllOrders(data);
     } catch (error) {
@@ -15,11 +17,41 @@ const Orders = () => {
   };
 
   useEffect(() => {
-    fetchInfo();
-  }, []);
+    fetchOrders(view);
+  }, [view]);
+
+  const checkDelivered = async (id) => {
+    try {
+      await fetch('http://localhost:4000/check-delivered', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id }),
+      });
+      fetchOrders(view);
+    } catch (error) {
+      console.error('Error marking order as delivered:', error);
+    }
+  };
 
   return (
     <div className="orders-container">
+      <div className="view-toggle">
+        <button 
+          className={view === 'notDelivered' ? 'active' : ''} 
+          onClick={() => setView('notDelivered')}
+        >
+          Pending Orders
+        </button>
+        <button 
+          className={view === 'delivered' ? 'active' : ''} 
+          onClick={() => setView('delivered')}
+        >
+          Delivered Orders
+        </button>
+      </div>
       {allOrders.length === 0 ? (
         <p>No orders found.</p>
       ) : (
@@ -34,6 +66,7 @@ const Orders = () => {
               <th>Receiver Name</th>
               <th>Total Amount</th>
               <th>Cart Items</th>
+              {view === 'notDelivered' && <th>Delivered</th>}
             </tr>
           </thead>
           <tbody>
@@ -66,6 +99,11 @@ const Orders = () => {
                     </tbody>
                   </table>
                 </td>
+                {view === 'notDelivered' && (
+                  <td>
+                    <button onClick={() => checkDelivered(order.orderId)}>Mark as Delivered</button>
+                  </td>
+                )}
               </tr>
             ))}
           </tbody>

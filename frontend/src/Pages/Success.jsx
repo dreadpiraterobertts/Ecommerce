@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import {BrowserRouter,Routes,Route, Link} from 'react-router-dom'
 import Confetti from 'react-confetti'
+import './css/success.css'
 
 const Success = () => {
   const [orderVerified, setOrderVerified] = useState(false);
@@ -56,8 +58,10 @@ const Success = () => {
   return (
     <div>
       {orderVerified ? (
-        <div>
+        <div className='success'>
           <h1>Payment Successful</h1>
+          
+         <button><Link style={{textDecoration:'none'}} to='/'>Keep Shopping</Link></button>
           <Confetti
           width={2000}
           height={720}
@@ -65,7 +69,11 @@ const Success = () => {
   
         </div>
       ) : (
-        <p>Verifying Order</p>
+       
+        <div  className='success'>
+          <p>Verifying Order.... </p>
+          <button><Link style={{textDecoration:'none'}} to='/'>Keep Shopping</Link></button>
+        </div>
       )}
     </div>
   );

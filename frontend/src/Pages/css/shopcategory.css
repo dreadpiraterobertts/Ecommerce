@@ -10,9 +10,14 @@
     align-items: center;
 }
 .shopcategory-sort{
+    display: flex;
+    gap:10px;
     padding:10px 20px;
     border-radius: 40px;
-    border:1px solid #888;
+    border:none;
+}
+.shopcategory-sort select{
+    border:none
 }
 .shopcategory-indexSort p span{
     font-weight: 600;
@@ -36,6 +41,7 @@
     font-size: 18px; ;
     font-weight: 500;
 }
+
 @media(max-width:1280px){
     .shopcategory-banner{
         margin:20px auto;
