@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
+import './checkout.css'
 
 const stripePromise = loadStripe('pk_test_51PNxEB1XzIPCkFeyWTm0BUlbyv0eTSJT3KNKnI48dTUz7e07BkND4bmKO7oJpZL0eUyDQ2NzXzBVV3sxDfYg9tUx00LYHPJAG6');
 
@@ -73,38 +74,80 @@ const CheckOutButton = ({ totalAmount, cartInfo }) => {
         </button>
       ) : (
         <form onSubmit={handleFormSubmit}>
-          <div>
-            <label>
-              Sender's Name:
-              <input type="text" name="senderName" value={deliveryInfo.senderName} onChange={handleInputChange} required />
-            </label>
-          </div>
-          <div>
-            <label>
-              Address:
-              <input type="text" name="address" value={deliveryInfo.address} onChange={handleInputChange} required />
-            </label>
-          </div>
-          <div>
-            <label>
-              City:
-              <input type="text" name="city" value={deliveryInfo.city} onChange={handleInputChange} required />
-            </label>
-          </div>
-          <div>
-            <label>
-              Reciever Name:
-              <input type="text" name="recieverName" value={deliveryInfo.recieverName} onChange={handleInputChange} required />
-            </label>
-          </div>
-          <div>
-            <label>
-              Reciever Phone:
-              <input type="text" name="recieverPhone" value={deliveryInfo.recieverPhone} onChange={handleInputChange} required />
-            </label>
-          </div>
-          <button type="submit">Submit and Proceed to Checkout</button>
-        </form>
+  <div>
+    <label>
+      Sender's Name:
+      <input 
+        type="text" 
+        name="senderName" 
+        value={deliveryInfo.senderName} 
+        onChange={handleInputChange} 
+        required 
+        pattern="[A-Za-z\s]{1,50}" 
+        title="Name should only contain letters and spaces, up to 50 characters." 
+      />
+    </label>
+  </div>
+  <div>
+    <label>
+      Address:
+      <input 
+        type="text" 
+        name="address" 
+        value={deliveryInfo.address} 
+        onChange={handleInputChange} 
+        required 
+        minlength="5" 
+        maxlength="100" 
+        title="Address should be between 5 and 100 characters long." 
+      />
+    </label>
+  </div>
+  <div>
+    <label>
+      City:
+      <input 
+        type="text" 
+        name="city" 
+        value={deliveryInfo.city} 
+        onChange={handleInputChange} 
+        required 
+        pattern="[A-Za-z\s]{1,50}" 
+        title="City should only contain letters and spaces, up to 50 characters." 
+      />
+    </label>
+  </div>
+  <div>
+    <label>
+      Reciever Name:
+      <input 
+        type="text" 
+        name="recieverName" 
+        value={deliveryInfo.recieverName} 
+        onChange={handleInputChange} 
+        required 
+        pattern="[A-Za-z\s]{1,50}" 
+        title="Name should only contain letters and spaces, up to 50 characters." 
+      />
+    </label>
+  </div>
+  <div>
+    <label>
+      Reciever Phone:
+      <input 
+        type="tel" 
+        name="recieverPhone" 
+        value={deliveryInfo.recieverPhone} 
+        onChange={handleInputChange} 
+        required 
+        pattern="\d{10}" 
+        title="Phone number should be a 10-digit number." 
+      />
+    </label>
+  </div>
+  <button type="submit">Submit and Proceed to Checkout</button>
+</form>
+
       )}
     </>
   );
