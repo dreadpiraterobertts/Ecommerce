@@ -15,8 +15,9 @@
    /*  margin-left: -50px; */
 }
 .nav-logo img{
-    width:250px;
+    width:200px;
     height: 250px;
+    margin: 30px;
 }
 .nav-logo p {
     color:#171717;
