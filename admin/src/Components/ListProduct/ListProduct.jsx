@@ -86,9 +86,10 @@ const ListProduct = () => {
                 <input type='text' name='old_price' value={editForm.old_price} onChange={handleEditChange} />
                 <input type='text' name='new_price' value={editForm.new_price} onChange={handleEditChange} />
                 <select type='text' name='category' value={editForm.category} onChange={handleEditChange} >
-                <option value="women">Women</option>
-                <option value="men">Men</option>
-                <option value="kid">Kid</option>
+                <option value="clothing">Clothing</option>
+                <option value="grocery">Grocery</option>
+                <option value="sweets">Sweets</option>
+                <option value="surprize">Surprize</option>
                </select>
                 <div className='edit-buttons'>
                   <button onClick={saveEdit}>Save</button>
@@ -102,7 +103,11 @@ const ListProduct = () => {
                 <p>${product.new_price}</p>
                 <p>{product.category}</p>
                 <button onClick={() => handleEdit(product)}>Edit</button>
-                <img onClick={() => removeProduct(product.id)} className='listproduct-remove-icon' src={cross_icon} alt='' />
+                <img onClick={() =>{
+                   if(window.confirm("Are you sure you want to delete the product?")){
+                    removeProduct(product.id)
+                  }
+                } }className='listproduct-remove-icon' src={cross_icon} alt='' />
               </>
             )}
           </div>

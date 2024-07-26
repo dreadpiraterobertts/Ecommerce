@@ -102,6 +102,11 @@
 .productdisplay-right-category span {
     font-weight: 600;
 }
+.drop{
+    border: none;
+    height: 25px;
+    font-weight: 550;
+}
 @media(max-width:1280px){
     .productdisplay{
         margin:0px 60px;

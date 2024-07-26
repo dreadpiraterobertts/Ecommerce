@@ -1,12 +1,22 @@
-.navbar{
+.navbar {
     display: flex;
     justify-content: space-around;
     padding: 16px 0px;
     box-shadow: 0 1px 3px -2px black;
     align-items: center;
     max-height: 50px;
- /*    margin: 0px 0px; */
+    position: fixed; /* Makes the navbar fixed at the top */
+    top: 0; /* Aligns the navbar to the top of the viewport */
+    width: 100%; /* Ensures the navbar spans the full width of the viewport */
+    background-color: white; /* Adjust based on your design */
+    z-index: 1000; /* Ensures the navbar stays above other content */
 }
+
+/* Add padding to the top of the body content to avoid overlap */
+body {
+    padding-top: 50px; /* Adjust based on the height of your navbar */
+}
+
 .nav-logo{
     margin-left: -120px;
     display: flex;
@@ -185,6 +195,7 @@
     .navbar{
         width:8px 0px;
         gap:0;
+        
     }
     .nav-logo{
         padding: 10px;
@@ -207,5 +218,8 @@
         position: absolute;
         top: 60px;
         
+    }
+    .nav-menu{
+        margin-right:45px;
     }
 }

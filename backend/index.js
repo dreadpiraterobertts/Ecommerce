@@ -341,14 +341,38 @@ app.post('/addproduct',async (req,res)=>{
 })
 //creating API for deleting product
 
-app.post('/removeproduct',async (req,res)=>{
-    await Product.findOneAndDelete({id:req.body.id})
-    console.log("removed")
-    res.json({
-        success:true,
-        name:req.body.name,
-    })
-})
+
+app.post('/removeproduct', async (req, res) => {
+    try {
+        const productId = req.body.id;
+        const product = await Product.findOne({ id: productId });
+
+        if (!product) {
+            return res.status(404).json({ message: "Product not found" });
+        }
+
+        // Remove product from MongoDB
+        await Product.findOneAndDelete({ id: productId });
+
+        // Remove image from disk
+        const imagePath = path.join(__dirname, 'upload', 'images', path.basename(product.image_url));
+        fs.unlink(imagePath, (err) => {
+            if (err) {
+                console.error(`Failed to delete image file: ${err}`);
+                return res.status(500).json({ message: "Failed to delete image file" });
+            }
+
+            console.log("removed");
+            res.json({
+                success: true,
+                name: req.body.name,
+            });
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Server error" });
+    }
+});
 //creating API for editing a product
 app.post('/editproduct', async (req, res) => {
     const { id, name, old_price, new_price, category } = req.body;
@@ -439,10 +463,10 @@ app.post('/login',async (req,res)=>{
             res.json({success:true,token})
         }
         else{
-            res.json({success:false, errors:"wrong password"})
+            res.json({success:false, errors:"Wrong password"})
         }
     }else{
-        res.json({success:false,errors:"wrong email id"})
+        res.json({success:false,errors:"Wrong email id"})
     }
 })
 
@@ -457,10 +481,10 @@ app.get('/newcollection', async (req, res) => {
 });
 
 //creating endpoint for popular in women section
-app.get('/popularinwomen', async(req,res)=>{
-    let products = await Product.find({category:"women"});
+app.get('/popular', async(req,res)=>{
+    let products = await Product.find({category:"clothing"});
     let popular_in_woman = products.slice(0,4)
-    console.log("Popular in woman fetched")
+    console.log("Popular in clothing fetched")
     res.send(popular_in_woman)
 })
 
