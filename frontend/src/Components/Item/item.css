@@ -27,16 +27,16 @@
 
 
 .add-to-cart img{
-    width:25px;
+    margin-top:-20px;
+    width:50px;
     transition: 0.3s;
     display: flex;
 }
 .add-to-cart img:hover{
-    background:#99cc5f ;
-
+    width: 60px;
 }
 .added-to-cart{
-    color: #99cc5f;
+    color: #000000;
 }
 @media(max-width:1280px){
     .item{

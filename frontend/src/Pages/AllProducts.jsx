@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import './css/shopcategory.css';
 import { ShopContext } from '../Context/ShopContext';
 import Item from '../Components/Item/Item';
-import search_icon from '../Components/Assets/search_icon.png';
+
 
 const AllProducts = () => {
   const { all_product } = useContext(ShopContext);
