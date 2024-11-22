@@ -1,7 +1,7 @@
 import React, { useState , useEffect} from 'react';
 import './AddBanner.css';
 import upload_area from '../../assets/upload_area.svg';
-
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
 const AddBanner = () => {
 
     const [banners, setBanners] = useState([]);
@@ -13,7 +13,7 @@ const AddBanner = () => {
 
     const fetchBanners = async () => {
         try {
-            const response = await fetch('http://localhost:4000/banners');
+            const response = await fetch(`${backendUrl}/banners`);
             const data = await response.json();
             if (data.success) {
                 setBanners(data.banners);
@@ -30,7 +30,7 @@ const AddBanner = () => {
 
     const removeBanner = async (id) => {
         try {
-            const response = await fetch(`http://localhost:4000/delbanner`, {
+            const response = await fetch(`${backendUrl}/delbanner`, {
                 method: 'POST',
                 headers:{
                     id:id,
@@ -71,7 +71,7 @@ const AddBanner = () => {
         let formData = new FormData();
         formData.append('banner', image);
 
-        await fetch('http://localhost:4000/upload/banner', {
+        await fetch(`${backendUrl}/upload/banner`, {
             method: "POST",
             headers: {
                 Accept: "application/json",
@@ -82,7 +82,7 @@ const AddBanner = () => {
         if (responseData.success) {
             banner.image = responseData.image_url;
             console.log(banner);
-            await fetch('http://localhost:4000/addbanner', {
+            await fetch(`${backendUrl}/addbanner`, {
                 method: "POST",
                 headers: {
                     Accept: "application/json",

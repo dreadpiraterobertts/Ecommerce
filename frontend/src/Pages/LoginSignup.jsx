@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './css/loginsignup.css';
-
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
 const LoginSignup = () => {
   const [state, setState] = useState("Login");
   const [formData, setFormData] = useState({
@@ -16,7 +16,7 @@ const LoginSignup = () => {
 
   const handleFormSubmit = async () => {
     let responseData;
-    const endpoint = state === "Login" ? 'http://localhost:4000/login' : 'http://localhost:4000/signup';
+    const endpoint = state === "Login" ? `${backendUrl}/login` : `${backendUrl}/signup`;
 
     try {
       const response = await fetch(endpoint, {

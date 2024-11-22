@@ -14,7 +14,7 @@ import women_banner from './Components/Assets/banner_women.png';
 import kids_banner from './Components/Assets/banner_kids.png';
 import AllProducts from './Pages/AllProducts';
 import Success from './Pages/Success';
-
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 
 
@@ -28,7 +28,7 @@ function App() {
   },[])
   const fetchBanners = async () => {
     try {
-        const response = await fetch('http://localhost:4000/banners');
+        const response = await fetch(`${backendUrl}/banners`);
         const data = await response.json();
         if (data.success) {
             setBanner(data.banners);

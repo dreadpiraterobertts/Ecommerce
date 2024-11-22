@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import './checkout.css'
-
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
 const stripePromise = loadStripe('pk_test_51PNxEB1XzIPCkFeyWTm0BUlbyv0eTSJT3KNKnI48dTUz7e07BkND4bmKO7oJpZL0eUyDQ2NzXzBVV3sxDfYg9tUx00LYHPJAG6');
 
 const CheckOutButton = ({ totalAmount, cartInfo }) => {
@@ -31,7 +31,7 @@ const CheckOutButton = ({ totalAmount, cartInfo }) => {
     console.log(deliveryInfo);
     const stripe = await stripePromise;
 
-    const response = await fetch('http://localhost:4000/create-checkout-session', {
+    const response = await fetch(`${backendUrl}/create-checkout-session`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

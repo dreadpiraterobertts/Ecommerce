@@ -1,7 +1,7 @@
 import React, { useEffect,useState } from 'react'
 import './offers.css'
 import exclusive_image from '../Assets/exclusive_image.png'
-
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
 const Offers = () => {
   const [banner,setBanner] = useState([])
   
@@ -11,7 +11,7 @@ const Offers = () => {
   },[])
   const fetchBanners = async () => {
     try {
-        const response = await fetch('http://localhost:4000/banners');
+        const response = await fetch(`${backendUrl}/banners`);
         const data = await response.json();
         if (data.success) {
             setBanner(data.banners);

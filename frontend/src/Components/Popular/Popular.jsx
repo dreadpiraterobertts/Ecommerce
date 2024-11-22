@@ -1,14 +1,14 @@
 import React, { useEffect,useState } from 'react'
 import './popular.css'
 import Item from '../Item/Item'
-
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
 const Popular = () => {
 
   const[popularProducts,setPopularProducts] = useState([])
 
  
   useEffect(()=>{
-    fetch('http://localhost:4000/popular ')
+    fetch(`${backendUrl}/popular`)
     .then((response)=>response.json())
     .then((data)=>setPopularProducts(data))
   },[])

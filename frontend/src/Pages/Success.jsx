@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import {BrowserRouter,Routes,Route, Link} from 'react-router-dom'
 import Confetti from 'react-confetti'
 import './css/success.css'
-
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
 const Success = () => {
   const [orderVerified, setOrderVerified] = useState(false);
   const location = useLocation();
@@ -16,7 +16,7 @@ const Success = () => {
     console.log(parsedLocalData);
 
     if (sessionId && !orderVerified) {
-      fetch(`http://localhost:4000/verify-session/${sessionId}`)
+      fetch(`${backendUrl}/verify-session/${sessionId}`)
         .then((response) => response.json())
         .then((data) => {
           if (data.success) {
@@ -38,7 +38,7 @@ const Success = () => {
   }, []);
 
   const sendLocalData = (data) => {
-    fetch(`http://localhost:4000/process-local-storage-data`, {
+    fetch(`${backendUrl}/process-local-storage-data`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

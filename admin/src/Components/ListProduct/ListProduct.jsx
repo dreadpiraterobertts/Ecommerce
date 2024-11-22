@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './ListProduct.css';
 import cross_icon from '../../assets/cross_icon.png';
-
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
 const ListProduct = () => {
   const [allProducts, setAllProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -9,7 +9,7 @@ const ListProduct = () => {
   const [editForm, setEditForm] = useState({ id: '', name: '', old_price: '', new_price: '', category: '' });
 
   const fetchInfo = async () => {
-    await fetch('http://localhost:4000/allproducts')
+    await fetch(`${backendUrl}/allproducts`)
       .then((res) => res.json())
       .then((data) => { setAllProducts(data); });
   };
@@ -19,7 +19,7 @@ const ListProduct = () => {
   }, []);
 
   const removeProduct = async (id) => {
-    await fetch('http://localhost:4000/removeproduct', {
+    await fetch(`${backend}/removeproduct`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -41,7 +41,7 @@ const ListProduct = () => {
   };
 
   const saveEdit = async () => {
-    await fetch('http://localhost:4000/editproduct', {
+    await fetch(`${backendUrl}/editproduct`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './orders.css'; // Import the CSS file
-
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
 const Orders = () => {
   const [allOrders, setAllOrders] = useState([]);
   const [view, setView] = useState('notDelivered'); // Toggle state for view
@@ -8,7 +8,7 @@ const Orders = () => {
   const fetchOrders = async (view) => {
     const endpoint = view === 'delivered' ? 'get-delivered-orders' : 'get-orders';
     try {
-      const response = await fetch(`http://localhost:4000/${endpoint}`);
+      const response = await fetch(`${backendUrl}/${endpoint}`);
       const data = await response.json();
       setAllOrders(data);
     } catch (error) {
@@ -22,7 +22,7 @@ const Orders = () => {
 
   const checkDelivered = async (id) => {
     try {
-      await fetch('http://localhost:4000/check-delivered', {
+      await fetch(`${backendUrl}/check-delivered`, {
         method: 'POST',
         headers: {
           Accept: 'application/json',
